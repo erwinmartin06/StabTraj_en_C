@@ -62,7 +62,7 @@ int calculateCritMsCnmin(const char* Type_fusee);
 int calculateCritMsCnmax(const char* Type_fusee);
 
 //Stable or not?
-const char* checkStability(double Cn, double Cn0, double MS_min, double MS_max, double MS_Cn_min, double MS_Cn_max, double CritCnmin, double CritCnmax, double CritMsmin, double CritMsmax, double CritMsCnmin, double CritMsCnmax);
+char* checkStability(double Cn, double Cn0, double MS_min, double MS_max, double MS_Cn_min, double MS_Cn_max, double CritCnmin, double CritCnmax, double CritMsmin, double CritMsmax, double CritMsCnmin, double CritMsCnmax);
 
 // This code only works for two-stage rockets with a bi-empennage
 const char* Type_fusee = "Fusée expérimentale.";  // Rocket type
@@ -74,7 +74,7 @@ const char* withOrWithoutPropuShip = "sans propu"; // With or without propellant
 // This code takes 19 arguments in this order: 
 int main(int argc, char *argv[]) {
     // Input values
-    if (argc < 20) {
+    if (argc < 19) {
         fprintf(stderr, "Not enough arguments.\n");
         return 1;
     }
@@ -89,17 +89,17 @@ int main(int argc, char *argv[]) {
     int Long_ogive = atoi(argv[7]); // Length of the ogive
     int D_og = atoi(argv[8]); // Diameter of the ogive
     char* Propu = argv[9]; // Propeller used for the booster
-    int XpropuRef = atoi(argv[10]); // Position of the propeller for the booster
-    int Q_ail = atoi(argv[11]); // Number of fins for the booster
-    int X_ail = atoi(argv[12]); // Position of the fins for the booster
+    int Q_ail = atoi(argv[10]); // Number of fins for the booster
+    int X_ail = atoi(argv[11]); // Position of the fins for the booster
     
-    int Long_totShip = atoi(argv[13]); // Length of the ship
-    int MasseShip = atoi(argv[14]); // Mass of the ship
-    int CGShip = atoi(argv[15]); // Center of gravity of the ship
-    char* PropuShip = argv[16]; // Propeller used for the ship
-    int XpropuRefShip = atoi(argv[17]); // Position of the propeller for the ship
-    int Q_can = atoi(argv[18]); // Number of fins for the ship
-    int X_can = atoi(argv[19]); // Position of the fins for the ship
+    int Long_totShip = atoi(argv[12]); // Length of the ship
+    int MasseShip = atoi(argv[13]); // Mass of the ship
+    int CGShip = atoi(argv[14]); // Center of gravity of the ship
+    char* PropuShip = argv[15]; // Propeller used for the ship
+    int Q_can = atoi(argv[16]); // Number of fins for the ship
+    int X_can = atoi(argv[17]); // Position of the fins for the ship
+
+    int alpha = atoi(argv[18]); // Importance of the stability of the entire rocket over the ship alone
 
     // To VERIFY on the Excel file
     int X_j = 300;
@@ -123,9 +123,12 @@ int main(int argc, char *argv[]) {
     // Variable declarations that will stock the best values found
     int best_m_ail = 0, best_n_ail = 0, best_p_ail = 0, best_E_ail = 0;
     int best_m_can = 0, best_n_can = 0, best_p_can = 0, best_E_can = 0;
-    int minDistanceGlobal = DBL_MAX;
-    char* best_stability[20];
-    char* best_stabilityShip[20];
+    int minDistanceGlobal = 1000000;
+    char best_stability[20];
+    char best_stabilityShip[20];
+
+    int best_cn = 0, best_cn0 = 0, best_ms_min = 0, best_ms_max = 0, best_ms_cn_min = 0, best_ms_cn_max = 0;
+    int best_cn_ship = 0, best_cn0_ship = 0, best_ms_min_ship = 0, best_ms_max_ship = 0, best_ms_cn_min_ship = 0, best_ms_cn_max_ship = 0;
     
     int Q_int = (Q_ail == Q_can) ? Q_ail : 0;
     int D_int = D_ail;
@@ -236,7 +239,7 @@ int main(int argc, char *argv[]) {
                                     int MS_Cn_maxShip = calculateMS_Cn_max(MS_maxShip, Cn0Ship);
 
                                     // Calculate the distance
-                                    int distance = calculateDistance(Cn, Cn0, MS_min, MS_max, MS_Cn_min, MS_Cn_max, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
+                                    int distance = alpha*calculateDistance(Cn, Cn0, MS_min, MS_max, MS_Cn_min, MS_Cn_max, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
                                     int distanceShip = calculateDistance(CnShip, Cn0Ship, MS_minShip, MS_maxShip, MS_Cn_minShip, MS_Cn_maxShip, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
 
                                     // Check if the rocket is stable
@@ -252,12 +255,28 @@ int main(int argc, char *argv[]) {
                                         best_n_ail = n_ail;
                                         best_p_ail = p_ail;
                                         best_E_ail = E_ail;
+
                                         best_m_can = m_can;
                                         best_n_can = n_can;
                                         best_p_can = p_can;
                                         best_E_can = E_can;
-                                        strcmp(best_stability, stability);
-                                        strcmp(best_stabilityShip, stabilityShip);
+
+                                        best_cn = Cn;
+                                        best_cn0 = Cn0;
+                                        best_ms_min = MS_min;
+                                        best_ms_max = MS_max;
+                                        best_ms_cn_min = MS_Cn_min;
+                                        best_ms_cn_max = MS_Cn_max;
+
+                                        best_cn_ship = CnShip;
+                                        best_cn0_ship = Cn0Ship;
+                                        best_ms_min_ship = MS_minShip;
+                                        best_ms_max_ship = MS_maxShip;
+                                        best_ms_cn_min_ship = MS_Cn_minShip;
+                                        best_ms_cn_max_ship = MS_Cn_maxShip;
+
+                                        strcpy(best_stability, stability);
+                                        strcpy(best_stabilityShip, stabilityShip);
                                     }
                                 }
                             }
@@ -266,14 +285,21 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
+        // Print the progress
+        printf("Progress: %d%%\n", (E_ail - 100) * 100 / 300);
     }
 
     // Output the best values found
     printf("Valeures optimales trouvées :\n");
-    printf("Pour la Fusée entière : Emplanture : %f, Saumon : %f, Flèche : %f, Envergure : %f\n", best_m_ail, best_n_ail, best_p_ail, best_E_ail);
-    printf("Pour le Ship : Emplanture : %f, Saumon : %f, Flèche : %f, Envergure : %f\n", best_m_can, best_n_can, best_p_can, best_E_can);
-    printf("Le Ship est : %s\n", best_stabilityShip);
+    printf("Pour la Fusée entière : Emplanture : %d, Saumon : %d, Flèche : %d, Envergure : %d\n", best_m_ail, best_n_ail, best_p_ail, best_E_ail);
+    printf("Pour le Ship : Emplanture : %d, Saumon : %d, Flèche : %d, Envergure : %d\n\n", best_m_can, best_n_can, best_p_can, best_E_can);
+
+    printf("Résultats (à vérifier avec StabTraj) :\n");
+    printf("Pour la Fusée entière : Cn : %d, Cn0 : %d, MS_min : %d, MS_max : %d, MS_Cn_min : %d, MS_Cn_max : %d\n", best_cn, best_cn0, best_ms_min, best_ms_max, best_ms_cn_min, best_ms_cn_max);
+    printf("Pour le Ship : Cn : %d, Cn0 : %d, MS_min : %d, MS_max : %d, MS_Cn_min : %d, MS_Cn_max : %d\n\n", best_cn_ship, best_cn0_ship, best_ms_min_ship, best_ms_max_ship, best_ms_cn_min_ship, best_ms_cn_max_ship);
+
     printf("La Fusée entière est : %s\n", best_stability);
+    printf("Le Ship est : %s\n", best_stabilityShip);
 
     return 0;
 }
@@ -283,7 +309,7 @@ PropellerChar propellerCaracteristics(char* Propu) {
     PropellerChar propeller;
 
     // Original (Pro75-3G C)
-    if (strcmp(Propu, "Pro75-3G C") == 0) {
+    if (strcmp(Propu, "Pro75-3G") == 0) {
         propeller.Long_propu = 486;
         propeller.MpropuVide = 1.638;
         propeller.MpropuPlein = 3.511;
@@ -291,7 +317,7 @@ PropellerChar propellerCaracteristics(char* Propu) {
         propeller.XpropuPlein = 243;
     }
     // Pandora (Pro24-6G BS)
-    else if (strcmp(Propu, "Pro24-6G BS") == 0) {
+    else if (strcmp(Propu, "Pro24-6G") == 0) {
         propeller.Long_propu = 228;
         propeller.MpropuVide = 0.0843;
         propeller.MpropuPlein = 0.1599;
@@ -299,7 +325,7 @@ PropellerChar propellerCaracteristics(char* Propu) {
         propeller.XpropuPlein = 114;
     }
     // Barasinga (Pro54-5G C)
-    else if (strcmp(Propu, "Pro54-5G C") == 0) {
+    else if (strcmp(Propu, "Pro54-5G") == 0) {
         propeller.Long_propu = 488;
         propeller.MpropuVide = 0.652;
         propeller.MpropuPlein = 1.685;
@@ -597,7 +623,7 @@ int calculateCritMsCnmax(const char* Type_fusee) {
 }
 
 // Know if the rocket is stable
-const char* checkStability(double Cn, double Cn0, double MS_min, double MS_max, double MS_Cn_min, double MS_Cn_max, double CritCnmin, double CritCnmax, double CritMsmin, double CritMsmax, double CritMsCnmin, double CritMsCnmax) {
+char* checkStability(double Cn, double Cn0, double MS_min, double MS_max, double MS_Cn_min, double MS_Cn_max, double CritCnmin, double CritCnmax, double CritMsmin, double CritMsmax, double CritMsCnmin, double CritMsCnmax) {
     // Check if within stable range
     int isStable = CritCnmin < Cn && Cn0 < CritCnmax && CritMsmin < MS_min && MS_max < CritMsmax && CritMsCnmin < MS_Cn_min && MS_Cn_max < CritMsCnmax;
 
