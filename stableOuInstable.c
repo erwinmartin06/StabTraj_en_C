@@ -4,6 +4,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct {
+    int Long_propu;
+    double MpropuVide;
+    double MpropuPlein;
+    int XpropuVide;
+    int XpropuPlein;
+} PropellerChar; // Propeller characteristics. For the moment, there's only data for Pro54-5G C, Pro75-3G C and Pro24-6G BS propellers. You can add data for other propellers if you want.
+
+//Propeller characteristics prototype
+PropellerChar propellerCaracteristics(char* Propu);
+
 // Function Prototypes
 int calculateDistance(int Cn, int Cn0, int MS_min, int MS_max, int MS_Cn_min, int MS_Cn_max, int CritCnmin, int CritCnmax, int CritMsmin, int CritMsmax, int CritMsCnmin, int CritMsCnmax);
 int calculateLineDistance(int value1, int value2, int center1, int center2, int centerRangeFactor);
@@ -54,30 +65,45 @@ int calculateCritMsCnmax(const char* Type_fusee);
 const char* Type_fusee = "Fusée expérimentale.";  // Rocket type
 const char* Type_masquage_bi = "bi-empennage"; // Masking type for the entire rocket
 const char* Type_masquage_ship = "Mono-empennage"; // Masking type for the ship
-const char* withOrWithoutPropu = "sans propu"; // With or without propellant
+const char* withOrWithoutPropu = "sans propu"; // With or without propellant for the entire booster (corresponds to D11 and D12)
+const char* withOrWithoutPropuShip = "sans propu"; // With or without propellant for the ship (corresponds to D11 and D12)
 
-//This code takes x arguments in this order: 
+// This code takes 19 arguments in this order: 
 int main(int argc, char *argv[]) {
     // Input values
-    if (argc < 5) {
+    if (argc < 20) {
         fprintf(stderr, "Not enough arguments.\n");
         return 1;
     }
 
     int currentStep = atoi(argv[1]);
-    int Long_tot = atoi(argv[2]);
-    int D_ref = atoi(argv[3]);
-    char* Forme_ogive = argv[4];
-    int Long_ogive = atoi(argv[5]);
-    int D_og = atoi(argv[6]);
-    char* Propu = argv[7];
-    int XpropuRef = atoi(argv[8]);
-    int Q_ail = atoi(argv[9]);
-    int Q_can = atoi(argv[10]);
-    int X_ail = atoi(argv[11]);
-    int X_can = atoi(argv[12]);
-    int D2j = atoi(argv[13]);
-    int XpropuRefShip = atoi(argv[14]);
+
+    int Long_tot = atoi(argv[2]); // Length of the booster + ship
+    int D_ref = atoi(argv[3]); // Diameter of the booster + ship
+    int Masse = atoi(argv[4]); // Mass of the booster + ship
+    int CG = atoi(argv[5]); // Center of gravity of the booster + ship
+    char* Forme_ogive = argv[6]; // Shape of the ogive
+    int Long_ogive = atoi(argv[7]); // Length of the ogive
+    int D_og = atoi(argv[8]); // Diameter of the ogive
+    char* Propu = argv[9]; // Propeller used for the booster
+    int XpropuRef = atoi(argv[10]); // Position of the propeller for the booster
+    int Q_ail = atoi(argv[11]); // Number of fins for the booster
+    int X_ail = atoi(argv[12]); // Position of the fins for the booster
+    
+    int Long_totShip = atoi(argv[13]); // Length of the ship
+    int MasseShip = atoi(argv[14]); // Mass of the ship
+    int CGShip = atoi(argv[15]); // Center of gravity of the ship
+    char* PropuShip = argv[16]; // Propeller used for the ship
+    int XpropuRefShip = atoi(argv[17]); // Position of the propeller for the ship
+    int Q_can = atoi(argv[18]); // Number of fins for the ship
+    int X_can = atoi(argv[19]); // Position of the fins for the ship
+
+    // To VERIFY on the Excel file
+    int X_j = 300;
+    int X_r = 500;
+    int l_j = 50;
+    int l_r = 50;
+    int D2j = 80;
 
     // Formulas
     int D_ail = D_ref;
@@ -89,13 +115,7 @@ int main(int argc, char *argv[]) {
     int X_intShip = X_can;
 
     int XpropuRef = Long_tot;
-    int XpropuRefShip = Long_tot;
-
-    // To VERIFY on the Excel file
-    int X_j = 300;
-    int X_r = 500;
-    int l_j = 50;
-    int l_r = 50;
+    int XpropuRefShip = Long_totShip;
 
     // Variable declarations that will stock the best values found
     int best_m_ail = 0, best_n_ail = 0, best_p_ail = 0, best_E_ail = 0;
@@ -103,6 +123,9 @@ int main(int argc, char *argv[]) {
     int minDistanceGlobal = DBL_MAX;
     int Q_int = (Q_ail == Q_can) ? Q_ail : 0;
     int D_int = D_ail;
+
+    PropellerChar propeller = propellerCaracteristics(Propu);
+    PropellerChar propellerShip = propellerCaracteristics(PropuShip);
 
     // Critical values
     int CritCnmin = calculateCritCnmin(Type_fusee);
@@ -164,13 +187,14 @@ int main(int argc, char *argv[]) {
                                     int XCpj = calculateXCpj(X_j, l_j, D1j, D2j);
                                     int XCpr = calculateXCpr(X_r, l_r, D1r, D2r);
                                     int XCpo = calculateXCpo(Forme_ogive, Long_ogive);
-                                    int MasseSans = calculateMasseSans(D11, C11, MpropuVide, MpropuPlein);
-                                    int XcgSans = calculateXcgSans(D12, C12, MasseVide, XpropuRef, Long_propu, XpropuVide, MasseSans, MpropuPlein, MpropuVide, XpropuPlein);
+                                    int MasseSans = calculateMasseSans(withOrWithoutPropu, Masse, propeller.MpropuVide, propeller.MpropuPlein);
+                                    int MasseVide = MasseSans + propeller.MpropuVide;
+                                    int XcgSans = calculateXcgSans(withOrWithoutPropu, CG, MasseVide, XpropuRef, propeller.Long_propu, propeller.XpropuVide, MasseSans, propeller.MpropuPlein, propeller.MpropuVide, propeller.XpropuPlein);
 
                                     int Xcp = calculateXCp(Cnai, XCpai, Cnc, XCpc, Cnj, XCpj, Cnr, XCpr, Cno, XCpo);
                                     int Xcp0 = calculateXCp0(Cnail, XCpa, Cnc, XCpc, Cnj, XCpj, Cnr, XCpr, Cno, XCpo);
-                                    int XcgPlein = calculateXcgPlein(XcgSans, MasseSans, XpropuRef, Long_propu, XpropuPlein, MpropuPlein);
-                                    int XcgVide = calculateXcgVide(XcgSans, MasseSans, XpropuRef, Long_propu, XpropuVide, MpropuVide);
+                                    int XcgPlein = calculateXcgPlein(XcgSans, MasseSans, XpropuRef, propeller.Long_propu, propeller.XpropuPlein, propeller.MpropuPlein);
+                                    int XcgVide = calculateXcgVide(XcgSans, MasseSans, XpropuRef, propeller.Long_propu, propeller.XpropuVide, propeller.MpropuVide);
 
                                     // Calculations of Xcp for the ship etc
                                     int XCpiShip = calculateXCpi(Type_masquage_ship, X_intShip, m_int, p_int, n_int);
@@ -180,8 +204,14 @@ int main(int argc, char *argv[]) {
                                     int XCpjShip = calculateXCpj(X_j, l_j, D1j, D2j);
                                     int XCprShip = calculateXCpr(X_r, l_r, D1r, D2r);
                                     int XCpoShip = calculateXCpo(Forme_ogive, Long_ogive);
-                                    int MasseSansShip = calculateMasseSans(D11Ship, C11Ship, MpropuVideShip, MpropuPleinShip);
-                                    int XcgSansShip = calculateXcgSans(D12Ship, C12Ship, MasseVideShip, XpropuRefShip, Long_propuShip, XpropuVideShip, MasseSansShip, MpropuPleinShip, MpropuVideShip, XpropuPleinShip);
+                                    int MasseSansShip = calculateMasseSans(withOrWithoutPropuShip, MasseShip, propellerShip.MpropuVide, propellerShip.MpropuPlein);
+                                    int MasseVideShip = MasseSansShip + propellerShip.MpropuVide;
+                                    int XcgSansShip = calculateXcgSans(withOrWithoutPropuShip, CGShip, MasseVideShip, XpropuRefShip, propellerShip.Long_propu, propellerShip.XpropuVide, MasseSansShip, propellerShip.MpropuPlein, propellerShip.MpropuVide, propellerShip.XpropuPlein);
+
+                                    int XcpShip = calculateXCp(CnaiShip, XCpaiShip, CncShip, XCpcShip, CnjShip, XCpjShip, CnrShip, XCprShip, CnoShip, XCpoShip);
+                                    int Xcp0Ship = calculateXCp0(CnailShip, XCpaShip, CncShip, XCpcShip, CnjShip, XCpjShip, CnrShip, XCprShip, CnoShip, XCpoShip);
+                                    int XcgPleinShip = calculateXcgPlein(XcgSansShip, MasseSansShip, XpropuRefShip, propellerShip.Long_propu, propellerShip.XpropuPlein, propellerShip.MpropuPlein);
+                                    int XcgVideShip = calculateXcgVide(XcgSansShip, MasseSansShip, XpropuRefShip, propellerShip.Long_propu, propellerShip.XpropuVide, propellerShip.MpropuVide);
 
                                     // Calculations of values "Portance", "MS", and "Couple" for the entire rocket
                                     int Cn = calculateCn(Cni, Cnail, Cnai, Cnc, Cno, Cnj, Cnr);
@@ -194,8 +224,8 @@ int main(int argc, char *argv[]) {
                                     // Calculations of values "Portance", "MS", and "Couple" for the ship
                                     int CnShip = calculateCn(CniShip, CnailShip, CnaiShip, CncShip, CnoShip, CnjShip, CnrShip);
                                     int Cn0Ship = calculateCn0(CnailShip, CncShip, CnoShip, CnjShip, CnrShip);
-                                    int MS_minShip = calculateMS_min();
-                                    int MS_maxShip = calculateMS_max();
+                                    int MS_minShip = calculateMS_min(XcpShip, XcgPleinShip, D_ref);
+                                    int MS_maxShip = calculateMS_max(Xcp0Ship, XcgVideShip, D_ref);
                                     int MS_Cn_minShip = calculateMS_Cn_min(MS_minShip, CnShip);
                                     int MS_Cn_maxShip = calculateMS_Cn_max(MS_maxShip, Cn0Ship);
 
@@ -231,6 +261,47 @@ int main(int argc, char *argv[]) {
     printf("Minimum Distance: %f\n", minDistanceGlobal);
 
     return 0;
+}
+
+// Function to get propeller characteristics based on its name
+PropellerChar propellerCaracteristics(char* Propu) {
+    PropellerChar propeller;
+
+    // Original (Pro75-3G C)
+    if (strcmp(Propu, "Pro75-3G C") == 0) {
+        propeller.Long_propu = 486;
+        propeller.MpropuVide = 1.638;
+        propeller.MpropuPlein = 3.511;
+        propeller.XpropuVide = 243;
+        propeller.XpropuPlein = 243;
+    }
+    // Pandora (Pro24-6G BS)
+    else if (strcmp(Propu, "Pro24-6G BS") == 0) {
+        propeller.Long_propu = 228;
+        propeller.MpropuVide = 0.0843;
+        propeller.MpropuPlein = 0.1599;
+        propeller.XpropuVide = 114;
+        propeller.XpropuPlein = 114;
+    }
+    // Barasinga (Pro54-5G C)
+    else if (strcmp(Propu, "Pro54-5G C") == 0) {
+        propeller.Long_propu = 488;
+        propeller.MpropuVide = 0.652;
+        propeller.MpropuPlein = 1.685;
+        propeller.XpropuVide = 240;
+        propeller.XpropuPlein = 250;
+    }
+    // Default case to handle unknown propellers
+    else {
+        printf("Unknown propeller type.\n");
+        propeller.Long_propu = -1;
+        propeller.MpropuVide = -1;
+        propeller.MpropuPlein = -1;
+        propeller.XpropuVide = -1;
+        propeller.XpropuPlein = -1;
+    }
+
+    return propeller;
 }
 
 //Calculation of values "Portance", "MS", and "Couple"
