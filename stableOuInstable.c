@@ -66,7 +66,7 @@ char* checkStability(double Cn, double Cn0, double MS_min, double MS_max, double
 
 // This code only works for two-stage rockets with a bi-empennage
 const char* Type_fusee = "Fusée expérimentale.";  // Rocket type
-const char* Type_masquage_bi = "bi-empennage"; // Masking type for the entire rocket
+const char* Type_masquage_bi = "Bi-empennage"; // Masking type for the entire rocket
 const char* Type_masquage_ship = "Mono-empennage"; // Masking type for the ship
 const char* withOrWithoutPropu = "sans propu"; // With or without propellant for the entire booster (corresponds to D11 and D12)
 const char* withOrWithoutPropuShip = "sans propu"; // With or without propellant for the ship (corresponds to D11 and D12)
@@ -164,26 +164,35 @@ double main(int argc, char *argv[]) {
                                         E_int = (D_can / 2.0 + E_can) - (D_ail / 2.0);
                                     }
 
+                                    double f_ail = sqrt(pow((p_ail + n_ail / 2.0 - m_ail / 2.0), 2) + pow(E_ail, 2));
+                                    double f_can = sqrt(pow((p_can + n_can / 2.0 - m_can / 2.0), 2) + pow(E_can, 2));
+
+                                    // Calculations for the entire rocket
                                     double m_int = m_ail;
                                     double n_int = n_ail + (m_ail-n_ail) * (1 - E_int/E_ail);
                                     double p_int = p_ail * E_int/E_ail;
-
                                     double f_int = sqrt(pow(p_int + n_int / 2.0 - m_int / 2.0, 2) + pow(E_int, 2));
+
+                                    // Calculations for the ship
+                                    double m_intShip = m_can;
+                                    double n_intShip = n_can + (m_can-n_can) * (1 - E_int/E_can);
+                                    double p_intShip = p_can * E_int/E_can;
+                                    double f_intShip = sqrt(pow(p_intShip + n_intShip / 2.0 - m_intShip / 2.0, 2) + pow(E_int, 2));
 
                                     // Calculations of values to calculate "Portance", "MS", and "Couple" for the entire rocket
                                     double Cni = calculateCni(Type_masquage_bi, Q_int, E_int, D_ref, D_int, f_int, m_int, n_int);
-                                    double Cnail = calculateCnail(Q_ail, E_ail, D_ref, D_ail, f_int, m_ail, n_ail);
+                                    double Cnail = calculateCnail(Q_ail, E_ail, D_ref, D_ail, f_ail, m_ail, n_ail);
                                     double Cnai = calculateCnai(Cnail, Cni);
-                                    double Cnc = calculateCnc(Type_masquage_bi, Q_can, E_can, D_ref, D_can, f_int, m_can, n_can);
+                                    double Cnc = calculateCnc(Type_masquage_bi, Q_can, E_can, D_ref, D_can, f_can, m_can, n_can);
                                     double Cno = calculateCno(D_og, D_ref);
                                     double Cnj = calculateCnj(D2j, D1j, D_ref);
                                     double Cnr = calculateCnr(D2r, D1r, D_ref);
 
                                     // Calculations of values to calculate "Portance", "MS", and "Couple" for the ship
-                                    double CniShip = calculateCni(Type_masquage_ship, Q_int, E_int, D_ref, D_int, f_int, m_int, n_int);
-                                    double CnailShip = calculateCnail(Q_can, E_can, D_ref, D_can, f_int, m_can, n_can);
+                                    double CniShip = calculateCni(Type_masquage_ship, Q_int, E_int, D_ref, D_int, f_intShip, m_intShip, n_intShip);
+                                    double CnailShip = calculateCnail(Q_can, E_can, D_ref, D_can, f_can, m_can, n_can);
                                     double CnaiShip = calculateCnai(CnailShip, CniShip);
-                                    double CncShip = calculateCnc(Type_masquage_ship, Q_can, E_can, D_ref, D_can, f_int, m_can, n_can);
+                                    double CncShip = calculateCnc(Type_masquage_ship, Q_can, E_can, D_ref, D_can, f_can, m_can, n_can);
                                     double CnoShip = calculateCno(D_og, D_ref);
                                     double CnjShip = calculateCnj(D2j, D1j, D_ref);
                                     double CnrShip = calculateCnr(D2r, D1r, D_ref);
@@ -206,7 +215,7 @@ double main(int argc, char *argv[]) {
                                     double XcgVide = calculateXcgVide(XcgSans, MasseSans, XpropuRef, propeller.Long_propu, propeller.XpropuVide, propeller.MpropuVide);
 
                                     // Calculations of Xcp for the ship etc
-                                    double XCpiShip = calculateXCpi(Type_masquage_ship, X_intShip, m_int, p_int, n_int);
+                                    double XCpiShip = calculateXCpi(Type_masquage_ship, X_intShip, m_intShip, p_intShip, n_intShip);
                                     double XCpaShip = calculateXCpa(X_can, m_can, p_can, n_can);
                                     double XCpaiShip = calculateXCpai(XCpaShip, CnailShip, XCpiShip, CniShip);
                                     double XCpcShip = calculateXCpc(Type_masquage_ship, X_can, m_can, p_can, n_can);
@@ -290,7 +299,7 @@ double main(int argc, char *argv[]) {
     }
 
     // Output the best values found
-    printf("Valeures optimales trouvées :\n");
+    printf("\nValeures optimales trouvées :\n");
     printf("Pour la Fusée entière : Emplanture : %d, Saumon : %d, Flèche : %d, Envergure : %d\n", best_m_ail, best_n_ail, best_p_ail, best_E_ail);
     printf("Pour le Ship : Emplanture : %d, Saumon : %d, Flèche : %d, Envergure : %d\n\n", best_m_can, best_n_can, best_p_can, best_E_can);
 
@@ -492,6 +501,7 @@ double calculateMasseSans(const char* D11, double C11, double MpropuVide, double
     } else if (strcmp(D11, "avec propu plein") == 0 || strcmp(D11, "with loaded motor") == 0) {
         return C11 / 1000 - MpropuPlein;
     }
+    
     return -1; // Error case
 }
 
