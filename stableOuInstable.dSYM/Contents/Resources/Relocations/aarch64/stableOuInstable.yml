@@ -1,0 +1,27 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/erwinmartin/Library/CloudStorage/OneDrive-Personal/Travail/2A/FUSEX/StabTraj_en_C/stableOuInstable'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100002190, symSize: 0xA94 }
+  - { offsetInCU: 0x4D, offset: 0x4D, size: 0x8, addend: 0x0, symName: _Type_fusee, symObjAddr: 0x1DC8, symBinAddr: 0x100008000, symSize: 0x0 }
+  - { offsetInCU: 0x6C, offset: 0x6C, size: 0x8, addend: 0x0, symName: _Type_masquage_bi, symObjAddr: 0x1DD0, symBinAddr: 0x100008008, symSize: 0x0 }
+  - { offsetInCU: 0x81, offset: 0x81, size: 0x8, addend: 0x0, symName: _Type_masquage_ship, symObjAddr: 0x1DD8, symBinAddr: 0x100008010, symSize: 0x0 }
+  - { offsetInCU: 0x96, offset: 0x96, size: 0x8, addend: 0x0, symName: _withOrWithoutPropu, symObjAddr: 0x1DE0, symBinAddr: 0x100008018, symSize: 0x0 }
+  - { offsetInCU: 0x9F, offset: 0x9F, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100002190, symSize: 0xA94 }
+  - { offsetInCU: 0x44A, offset: 0x44A, size: 0x8, addend: 0x0, symName: _calculateCritCnmin, symObjAddr: 0xA94, symBinAddr: 0x100002C24, symSize: 0x128 }
+  - { offsetInCU: 0x472, offset: 0x472, size: 0x8, addend: 0x0, symName: _calculateCritCnmax, symObjAddr: 0xBBC, symBinAddr: 0x100002D4C, symSize: 0x13C }
+  - { offsetInCU: 0x49C, offset: 0x49C, size: 0x8, addend: 0x0, symName: _calculateCritMsmin, symObjAddr: 0xCF8, symBinAddr: 0x100002E88, symSize: 0x138 }
+  - { offsetInCU: 0x4C6, offset: 0x4C6, size: 0x8, addend: 0x0, symName: _calculateCritMsmax, symObjAddr: 0xE30, symBinAddr: 0x100002FC0, symSize: 0x138 }
+  - { offsetInCU: 0x4F0, offset: 0x4F0, size: 0x8, addend: 0x0, symName: _calculateCritMsCnmin, symObjAddr: 0xF68, symBinAddr: 0x1000030F8, symSize: 0x13C }
+  - { offsetInCU: 0x51A, offset: 0x51A, size: 0x8, addend: 0x0, symName: _calculateCritMsCnmax, symObjAddr: 0x10A4, symBinAddr: 0x100003234, symSize: 0x14C }
+  - { offsetInCU: 0x544, offset: 0x544, size: 0x8, addend: 0x0, symName: _calculateCn, symObjAddr: 0x11F0, symBinAddr: 0x100003380, symSize: 0x430 }
+  - { offsetInCU: 0x738, offset: 0x738, size: 0x8, addend: 0x0, symName: _calculateCn0, symObjAddr: 0x1620, symBinAddr: 0x1000037B0, symSize: 0x324 }
+  - { offsetInCU: 0x8B4, offset: 0x8B4, size: 0x8, addend: 0x0, symName: _calculateMS_min, symObjAddr: 0x1944, symBinAddr: 0x100003AD4, symSize: 0x3C }
+  - { offsetInCU: 0x906, offset: 0x906, size: 0x8, addend: 0x0, symName: _calculateMS_max, symObjAddr: 0x1980, symBinAddr: 0x100003B10, symSize: 0x3C }
+  - { offsetInCU: 0x958, offset: 0x958, size: 0x8, addend: 0x0, symName: _calculateMS_Cn_min, symObjAddr: 0x19BC, symBinAddr: 0x100003B4C, symSize: 0x30 }
+  - { offsetInCU: 0x99C, offset: 0x99C, size: 0x8, addend: 0x0, symName: _calculateMS_Cn_max, symObjAddr: 0x19EC, symBinAddr: 0x100003B7C, symSize: 0x30 }
+  - { offsetInCU: 0x9E0, offset: 0x9E0, size: 0x8, addend: 0x0, symName: _calculateDistance, symObjAddr: 0x1A1C, symBinAddr: 0x100003BAC, symSize: 0xE4 }
+  - { offsetInCU: 0xAB0, offset: 0xAB0, size: 0x8, addend: 0x0, symName: _calculateLineDistance, symObjAddr: 0x1B00, symBinAddr: 0x100003C90, symSize: 0x118 }
+  - { offsetInCU: 0xB1E, offset: 0xB1E, size: 0x8, addend: 0x0, symName: _valueInRange, symObjAddr: 0x1C18, symBinAddr: 0x100003DA8, symSize: 0x58 }
+  - { offsetInCU: 0xB62, offset: 0xB62, size: 0x8, addend: 0x0, symName: _distanceToCenter, symObjAddr: 0x1C70, symBinAddr: 0x100003E00, symSize: 0x20 }
+...

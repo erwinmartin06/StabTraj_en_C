@@ -72,7 +72,7 @@ const char* withOrWithoutPropu = "sans propu"; // With or without propellant for
 const char* withOrWithoutPropuShip = "sans propu"; // With or without propellant for the ship (corresponds to D11 and D12)
 
 // This code takes 19 arguments in this order: 
-double main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
     // Input values
     if (argc < 19) {
         fprintf(stderr, "Not enough arguments.\n");
