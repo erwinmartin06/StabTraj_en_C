@@ -61,6 +61,9 @@ int calculateCritMsmax(const char* Type_fusee);
 int calculateCritMsCnmin(const char* Type_fusee);
 int calculateCritMsCnmax(const char* Type_fusee);
 
+//Stable or not?
+const char* checkStability(double Cn, double Cn0, double MS_min, double MS_max, double MS_Cn_min, double MS_Cn_max, double CritCnmin, double CritCnmax, double CritMsmin, double CritMsmax, double CritMsCnmin, double CritMsCnmax);
+
 // This code only works for two-stage rockets with a bi-empennage
 const char* Type_fusee = "Fusée expérimentale.";  // Rocket type
 const char* Type_masquage_bi = "bi-empennage"; // Masking type for the entire rocket
@@ -121,6 +124,9 @@ int main(int argc, char *argv[]) {
     int best_m_ail = 0, best_n_ail = 0, best_p_ail = 0, best_E_ail = 0;
     int best_m_can = 0, best_n_can = 0, best_p_can = 0, best_E_can = 0;
     int minDistanceGlobal = DBL_MAX;
+    char* best_stability[20];
+    char* best_stabilityShip[20];
+    
     int Q_int = (Q_ail == Q_can) ? Q_ail : 0;
     int D_int = D_ail;
 
@@ -233,6 +239,12 @@ int main(int argc, char *argv[]) {
                                     int distance = calculateDistance(Cn, Cn0, MS_min, MS_max, MS_Cn_min, MS_Cn_max, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
                                     int distanceShip = calculateDistance(CnShip, Cn0Ship, MS_minShip, MS_maxShip, MS_Cn_minShip, MS_Cn_maxShip, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
 
+                                    // Check if the rocket is stable
+                                    char* stability = checkStability(Cn, Cn0, MS_min, MS_max, MS_Cn_min, MS_Cn_max, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
+
+                                    // Check if the ship is stable
+                                    char* stabilityShip = checkStability(CnShip, Cn0Ship, MS_minShip, MS_maxShip, MS_Cn_minShip, MS_Cn_maxShip, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
+
                                     // Update the minimal distance and corresponding values
                                     if (distance + distanceShip < minDistanceGlobal) {
                                         minDistanceGlobal = distance + distanceShip;
@@ -244,6 +256,8 @@ int main(int argc, char *argv[]) {
                                         best_n_can = n_can;
                                         best_p_can = p_can;
                                         best_E_can = E_can;
+                                        strcmp(best_stability, stability);
+                                        strcmp(best_stabilityShip, stabilityShip);
                                     }
                                 }
                             }
@@ -255,10 +269,11 @@ int main(int argc, char *argv[]) {
     }
 
     // Output the best values found
-    printf("Best values found:\n");
-    printf("m_ail: %f, n_ail: %f, p_ail: %f, E_ail: %f\n", best_m_ail, best_n_ail, best_p_ail, best_E_ail);
-    printf("m_can: %f, n_can: %f, p_can: %f, E_can: %f\n", best_m_can, best_n_can, best_p_can, best_E_can);
-    printf("Minimum Distance: %f\n", minDistanceGlobal);
+    printf("Valeures optimales trouvées :\n");
+    printf("Pour la Fusée entière : Emplanture : %f, Saumon : %f, Flèche : %f, Envergure : %f\n", best_m_ail, best_n_ail, best_p_ail, best_E_ail);
+    printf("Pour le Ship : Emplanture : %f, Saumon : %f, Flèche : %f, Envergure : %f\n", best_m_can, best_n_can, best_p_can, best_E_can);
+    printf("Le Ship est : %s\n", best_stabilityShip);
+    printf("La Fusée entière est : %s\n", best_stability);
 
     return 0;
 }
@@ -579,5 +594,22 @@ int calculateCritMsCnmax(const char* Type_fusee) {
         return 90.0;
     }
     return 90.0; // Default case
+}
+
+// Know if the rocket is stable
+const char* checkStability(double Cn, double Cn0, double MS_min, double MS_max, double MS_Cn_min, double MS_Cn_max, double CritCnmin, double CritCnmax, double CritMsmin, double CritMsmax, double CritMsCnmin, double CritMsCnmax) {
+    // Check if within stable range
+    int isStable = CritCnmin < Cn && Cn0 < CritCnmax && CritMsmin < MS_min && MS_max < CritMsmax && CritMsCnmin < MS_Cn_min && MS_Cn_max < CritMsCnmax;
+
+    // Check if outside stable range
+    int isUnstable = Cn < CritCnmin || MS_min < CritMsmin || MS_Cn_min < CritMsCnmin;
+
+    if (isStable) {
+        return "STABLE";
+    } else if (isUnstable) {
+        return "INSTABLE";
+    } else {
+        return "SURSTABLE";
+    }
 }
 
