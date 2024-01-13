@@ -112,8 +112,6 @@ int main(int argc, char *argv[]) {
     int CritMsCnmin = calculateCritMsCnmin(Type_fusee);
     int CritMsCnmax = calculateCritMsCnmax(Type_fusee);
 
-    int currentStep = 50;
-
     // Iterate over the range of values
     for (int E_ail = 100; E_ail <= 400; E_ail += currentStep) {
         for (int m_ail = 50; m_ail <= 300; m_ail += currentStep) {
