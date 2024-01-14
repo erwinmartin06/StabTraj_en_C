@@ -3,6 +3,7 @@
 #include <float.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 typedef struct {
     double Long_propu;
@@ -61,8 +62,10 @@ double calculateCritMsmax(const char* Type_fusee);
 double calculateCritMsCnmin(const char* Type_fusee);
 double calculateCritMsCnmax(const char* Type_fusee);
 
-//Stable or not?
+// Stable or not?
 char* checkStability(double Cn, double Cn0, double MS_min, double MS_max, double MS_Cn_min, double MS_Cn_max, double CritCnmin, double CritCnmax, double CritMsmin, double CritMsmax, double CritMsCnmin, double CritMsCnmax);
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // This code only works for two-stage rockets with a bi-empennage
 const char* Type_fusee = "Fusée expérimentale.";  // Rocket type
@@ -133,6 +136,7 @@ int main(int argc, char *argv[]) {
     double Q_int = (Q_ail == Q_can) ? Q_ail : 0;
     double D_int = D_ail;
 
+    // Get propeller characteristics
     PropellerChar propeller = propellerCaracteristics(Propu);
     PropellerChar propellerShip = propellerCaracteristics(PropuShip);
 
@@ -144,6 +148,23 @@ int main(int argc, char *argv[]) {
     double CritMsCnmin = calculateCritMsCnmin(Type_fusee);
     double CritMsCnmax = calculateCritMsCnmax(Type_fusee);
 
+    // Initialize start time
+    clock_t start_time = clock();
+    double elapsed_seconds = 0;
+
+    // File opening
+    FILE *pf;
+
+    pf=fopen("valeursOptimales.out","w");
+    if (!pf) {
+        perror("error.out");
+        pf=stderr;
+    }
+    else
+        setvbuf(pf, NULL, _IOLBF, 0);
+    
+    long iterationsCompleted = 0;
+
     // Iterate over the range of values
     for (int E_ail = 100; E_ail <= 400; E_ail += currentStep) {
         for (int m_ail = 50; m_ail <= 300; m_ail += currentStep) {
@@ -153,7 +174,10 @@ int main(int argc, char *argv[]) {
                         for (int m_can = 50; m_can <= 300; m_can += currentStep) {
                             for (int n_can = 50; n_can <= m_can; n_can += currentStep) {
                                 for (int p_can = 0; p_can <= n_can; p_can += currentStep) {
-                                    
+
+                                    // Update the number of iterations completed
+                                    iterationsCompleted++;
+
                                     // Calculations of values to calculate the values to calculate "Portance", "MS", and "Couple"
                                     double E_int;
                                     if ((D_can / 2.0 + E_can) <= (D_ail / 2.0)) {
@@ -287,6 +311,27 @@ int main(int argc, char *argv[]) {
                                         strcpy(best_stability, stability);
                                         strcpy(best_stabilityShip, stabilityShip);
                                     }
+
+                                    // Write the best values found for the moment to the file and print them in the console every 10 000 000 iterations
+                                    if (iterationsCompleted % 10000000 == 0) {
+                                        fprintf(pf, "Temps passé depuis l'exécution : %d s\n", (int)elapsed_seconds);
+                                        fprintf(pf, "Nombre d'itérations : %ld\n\n", iterationsCompleted);
+
+                                        fprintf(pf, "Valeures optimales trouvées :\n");
+                                        fprintf(pf, "Pour la Fusée entière : Emplanture : %d, Saumon : %d, Flèche : %d, Envergure : %d\n", best_m_ail, best_n_ail, best_p_ail, best_E_ail);
+                                        fprintf(pf, "Pour le Ship : Emplanture : %d, Saumon : %d, Flèche : %d, Envergure : %d\n\n", best_m_can, best_n_can, best_p_can, best_E_can);
+
+                                        fprintf(pf, "Résultats (à vérifier avec StabTraj) :\n");
+                                        fprintf(pf, "Pour la Fusée entière : Cn : %f, Cn0 : %f, MS_min : %f, MS_max : %f, MS_Cn_min : %f, MS_Cn_max : %f\n", best_cn, best_cn0, best_ms_min, best_ms_max, best_ms_cn_min, best_ms_cn_max);
+                                        fprintf(pf, "Pour le Ship : Cn : %f, Cn0 : %f, MS_min : %f, MS_max : %f, MS_Cn_min : %f, MS_Cn_max : %f\n\n", best_cn_ship, best_cn0_ship, best_ms_min_ship, best_ms_max_ship, best_ms_cn_min_ship, best_ms_cn_max_ship);
+
+                                        fprintf(pf, "Limites critiques : Cnmin : %f, Cnmax : %f, MSmin : %f, MSmax : %f, MSCnmin : %f, MSCnmax : %f\n\n", CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
+
+                                        fprintf(pf, "La Fusée entière est : %s\n", best_stability);
+                                        fprintf(pf, "Le Ship est : %s\n\n", best_stabilityShip);
+
+                                        fprintf(pf, "----------------------------------------------------------------------\n\n");
+                                    }
                                 }
                             }
                         }
@@ -294,8 +339,20 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
-        // Print the progress
-        printf("Progress: %d%%\n", (E_ail - 100) * 100 / 300);
+        // Calculate elapsed time
+        clock_t current_time = clock();
+        elapsed_seconds = (double)(current_time - start_time) / CLOCKS_PER_SEC;
+
+        if (E_ail > 100) {
+            double progress_fraction = (double)(E_ail - 100) / 300;
+            double estimated_total_time = elapsed_seconds / progress_fraction;
+            double remaining_time_seconds = estimated_total_time - elapsed_seconds;
+
+            // Display the progress
+            printf("Progrès : %d%%\n", (int) (100.0 * progress_fraction));
+            printf("Temps passé depuis l'exécution : %d s\n", (int)elapsed_seconds);
+            printf("Estimation du temps restant : %d s\n\n", (int)remaining_time_seconds);
+        }
     }
 
     // Output the best values found
