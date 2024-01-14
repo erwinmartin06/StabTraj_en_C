@@ -369,6 +369,27 @@ int main(int argc, char *argv[]) {
     printf("La Fusée entière est : %s\n", best_stability);
     printf("Le Ship est : %s\n", best_stabilityShip);
 
+    // Output the best values found to the file
+    fprintf(pf, "Temps passé depuis l'exécution : %d s\n", (int)elapsed_seconds);
+    fprintf(pf, "Nombre d'itérations : %ld\n\n", iterationsCompleted);
+
+    fprintf(pf, "Valeures optimales trouvées :\n");
+    fprintf(pf, "Pour la Fusée entière : Emplanture : %d, Saumon : %d, Flèche : %d, Envergure : %d\n", best_m_ail, best_n_ail, best_p_ail, best_E_ail);
+    fprintf(pf, "Pour le Ship : Emplanture : %d, Saumon : %d, Flèche : %d, Envergure : %d\n\n", best_m_can, best_n_can, best_p_can, best_E_can);
+
+    fprintf(pf, "Résultats (à vérifier avec StabTraj) :\n");
+    fprintf(pf, "Pour la Fusée entière : Cn : %f, Cn0 : %f, MS_min : %f, MS_max : %f, MS_Cn_min : %f, MS_Cn_max : %f\n", best_cn, best_cn0, best_ms_min, best_ms_max, best_ms_cn_min, best_ms_cn_max);
+    fprintf(pf, "Pour le Ship : Cn : %f, Cn0 : %f, MS_min : %f, MS_max : %f, MS_Cn_min : %f, MS_Cn_max : %f\n\n", best_cn_ship, best_cn0_ship, best_ms_min_ship, best_ms_max_ship, best_ms_cn_min_ship, best_ms_cn_max_ship);
+
+    fprintf(pf, "Limites critiques : Cnmin : %f, Cnmax : %f, MSmin : %f, MSmax : %f, MSCnmin : %f, MSCnmax : %f\n\n", CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
+
+    fprintf(pf, "La Fusée entière est : %s\n", best_stability);
+    fprintf(pf, "Le Ship est : %s\n\n", best_stabilityShip);
+
+    fprintf(pf, "-----------------------------END-----------------------------------------");
+
+    fclose(pf);
+
     return 0;
 }
 

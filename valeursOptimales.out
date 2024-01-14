@@ -1,175 +1,31 @@
-Temps passé depuis l'exécution : 16 s
+Temps passé depuis l'exécution : 23 s
 Nombre d'itérations : 10000000
 
 Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 210, Saumon : 210, Flèche : 60, Envergure : 120
-Pour le Ship : Emplanture : 50, Saumon : 50, Flèche : 40, Envergure : 100
+Pour la Fusée entière : Emplanture : 275, Saumon : 125, Flèche : 0, Envergure : 175
+Pour le Ship : Emplanture : 150, Saumon : 150, Flèche : 50, Envergure : 100
 
 Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 12.436615, Cn0 : 15.927231, MS_min : 0.691612, MS_max : 3.352722, MS_Cn_min : 8.601311, MS_Cn_max : 53.399577
-Pour le Ship : Cn : 6.412089, Cn0 : 6.412089, MS_min : 2.298597, MS_max : 2.377333, MS_Cn_min : 14.738807, MS_Cn_max : 15.243670
+Pour la Fusée entière : Cn : 22.629770, Cn0 : 26.167689, MS_min : 2.007662, MS_max : 3.795295, MS_Cn_min : 45.432939, MS_Cn_max : 99.314108
+Pour le Ship : Cn : 8.626065, Cn0 : 8.626065, MS_min : 2.476895, MS_max : 2.555631, MS_Cn_min : 21.365858, MS_Cn_max : 22.045041
 
 Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
 
-La Fusée entière est : INSTABLE
+La Fusée entière est : STABLE
 Le Ship est : INSTABLE
 
 ----------------------------------------------------------------------
 
-Temps passé depuis l'exécution : 49 s
+Temps passé depuis l'exécution : 45 s
 Nombre d'itérations : 20000000
 
 Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 110, Saumon : 110, Flèche : 20, Envergure : 160
-Pour le Ship : Emplanture : 50, Saumon : 50, Flèche : 20, Envergure : 100
+Pour la Fusée entière : Emplanture : 50, Saumon : 50, Flèche : 50, Envergure : 275
+Pour le Ship : Emplanture : 125, Saumon : 75, Flèche : 25, Envergure : 125
 
 Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 16.139646, Cn0 : 19.299402, MS_min : 2.494764, MS_max : 4.561882, MS_Cn_min : 40.264603, MS_Cn_max : 88.041591
-Pour le Ship : Cn : 6.551408, Cn0 : 6.551408, MS_min : 2.289407, MS_max : 2.368143, MS_Cn_min : 14.998838, MS_Cn_max : 15.514671
-
-Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
-
-La Fusée entière est : STABLE
-Le Ship est : INSTABLE
-
-----------------------------------------------------------------------
-
-Temps passé depuis l'exécution : 65 s
-Nombre d'itérations : 30000000
-
-Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 250, Saumon : 70, Flèche : 0, Envergure : 180
-Pour le Ship : Emplanture : 150, Saumon : 150, Flèche : 60, Envergure : 100
-
-Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 21.979270, Cn0 : 25.449142, MS_min : 2.006056, MS_max : 3.822213, MS_Cn_min : 44.091645, MS_Cn_max : 97.272031
-Pour le Ship : Cn : 8.569215, Cn0 : 8.569215, MS_min : 2.501426, MS_max : 2.580163, MS_Cn_min : 21.435262, MS_Cn_max : 22.109969
-
-Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
-
-La Fusée entière est : STABLE
-Le Ship est : INSTABLE
-
-----------------------------------------------------------------------
-
-Temps passé depuis l'exécution : 98 s
-Nombre d'itérations : 40000000
-
-Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 90, Saumon : 70, Flèche : 40, Envergure : 200
-Pour le Ship : Emplanture : 110, Saumon : 110, Flèche : 100, Envergure : 120
-
-Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 20.225896, Cn0 : 23.999393, MS_min : 2.008727, MS_max : 4.143840, MS_Cn_min : 40.628305, MS_Cn_max : 99.449640
-Pour le Ship : Cn : 9.602406, Cn0 : 9.602406, MS_min : 3.084479, MS_max : 3.163215, MS_Cn_min : 29.618419, MS_Cn_max : 30.374476
-
-Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
-
-La Fusée entière est : STABLE
-Le Ship est : INSTABLE
-
-----------------------------------------------------------------------
-
-Temps passé depuis l'exécution : 114 s
-Nombre d'itérations : 50000000
-
-Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 70, Saumon : 50, Flèche : 20, Envergure : 240
-Pour le Ship : Emplanture : 190, Saumon : 190, Flèche : 180, Envergure : 120
-
-Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 21.602534, Cn0 : 24.957320, MS_min : 2.000541, MS_max : 4.001774, MS_Cn_min : 43.216752, MS_Cn_max : 99.873556
-Pour le Ship : Cn : 10.271642, Cn0 : 10.271642, MS_min : 3.045523, MS_max : 3.124259, MS_Cn_min : 31.282521, MS_Cn_max : 32.091271
-
-Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
-
-La Fusée entière est : STABLE
-Le Ship est : INSTABLE
-
-----------------------------------------------------------------------
-
-Temps passé depuis l'exécution : 147 s
-Nombre d'itérations : 60000000
-
-Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 50, Saumon : 50, Flèche : 40, Envergure : 260
-Pour le Ship : Emplanture : 150, Saumon : 150, Flèche : 120, Envergure : 120
-
-Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 21.188402, Cn0 : 24.057388, MS_min : 2.009885, MS_max : 3.935297, MS_Cn_min : 42.586249, MS_Cn_max : 94.672959
-Pour le Ship : Cn : 10.289506, Cn0 : 10.289506, MS_min : 3.048345, MS_max : 3.127081, MS_Cn_min : 31.365964, MS_Cn_max : 32.176120
-
-Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
-
-La Fusée entière est : STABLE
-Le Ship est : INSTABLE
-
-----------------------------------------------------------------------
-
-Temps passé depuis l'exécution : 163 s
-Nombre d'itérations : 70000000
-
-Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 50, Saumon : 50, Flèche : 40, Envergure : 260
-Pour le Ship : Emplanture : 150, Saumon : 150, Flèche : 120, Envergure : 120
-
-Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 21.188402, Cn0 : 24.057388, MS_min : 2.009885, MS_max : 3.935297, MS_Cn_min : 42.586249, MS_Cn_max : 94.672959
-Pour le Ship : Cn : 10.289506, Cn0 : 10.289506, MS_min : 3.048345, MS_max : 3.127081, MS_Cn_min : 31.365964, MS_Cn_max : 32.176120
-
-Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
-
-La Fusée entière est : STABLE
-Le Ship est : INSTABLE
-
-----------------------------------------------------------------------
-
-Temps passé depuis l'exécution : 196 s
-Nombre d'itérations : 80000000
-
-Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 50, Saumon : 50, Flèche : 40, Envergure : 260
-Pour le Ship : Emplanture : 150, Saumon : 150, Flèche : 120, Envergure : 120
-
-Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 21.188402, Cn0 : 24.057388, MS_min : 2.009885, MS_max : 3.935297, MS_Cn_min : 42.586249, MS_Cn_max : 94.672959
-Pour le Ship : Cn : 10.289506, Cn0 : 10.289506, MS_min : 3.048345, MS_max : 3.127081, MS_Cn_min : 31.365964, MS_Cn_max : 32.176120
-
-Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
-
-La Fusée entière est : STABLE
-Le Ship est : INSTABLE
-
-----------------------------------------------------------------------
-
-Temps passé depuis l'exécution : 212 s
-Nombre d'itérations : 90000000
-
-Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 50, Saumon : 50, Flèche : 40, Envergure : 260
-Pour le Ship : Emplanture : 150, Saumon : 150, Flèche : 120, Envergure : 120
-
-Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 21.188402, Cn0 : 24.057388, MS_min : 2.009885, MS_max : 3.935297, MS_Cn_min : 42.586249, MS_Cn_max : 94.672959
-Pour le Ship : Cn : 10.289506, Cn0 : 10.289506, MS_min : 3.048345, MS_max : 3.127081, MS_Cn_min : 31.365964, MS_Cn_max : 32.176120
-
-Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
-
-La Fusée entière est : STABLE
-Le Ship est : INSTABLE
-
-----------------------------------------------------------------------
-
-Temps passé depuis l'exécution : 244 s
-Nombre d'itérations : 100000000
-
-Valeures optimales trouvées :
-Pour la Fusée entière : Emplanture : 50, Saumon : 50, Flèche : 40, Envergure : 260
-Pour le Ship : Emplanture : 150, Saumon : 150, Flèche : 120, Envergure : 120
-
-Résultats (à vérifier avec StabTraj) :
-Pour la Fusée entière : Cn : 21.188402, Cn0 : 24.057388, MS_min : 2.009885, MS_max : 3.935297, MS_Cn_min : 42.586249, MS_Cn_max : 94.672959
-Pour le Ship : Cn : 10.289506, Cn0 : 10.289506, MS_min : 3.048345, MS_max : 3.127081, MS_Cn_min : 31.365964, MS_Cn_max : 32.176120
+Pour la Fusée entière : Cn : 22.177910, Cn0 : 25.183840, MS_min : 2.022567, MS_max : 3.949603, MS_Cn_min : 44.856305, MS_Cn_max : 99.466183
+Pour le Ship : Cn : 10.623688, Cn0 : 10.623688, MS_min : 2.822145, MS_max : 2.900881, MS_Cn_min : 29.981587, MS_Cn_max : 30.818055
 
 Limites critiques : Cnmin : 15.000000, Cnmax : 40.000000, MSmin : 2.000000, MSmax : 6.000000, MSCnmin : 40.000000, MSCnmax : 100.000000
 
