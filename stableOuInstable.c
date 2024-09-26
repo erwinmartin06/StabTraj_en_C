@@ -166,14 +166,14 @@ int main(int argc, char *argv[]) {
     long iterationsCompleted = 0;
 
     // Iterate over the range of values
-    for (int E_ail = 100; E_ail <= 400; E_ail += currentStep) {
-        for (int m_ail = 50; m_ail <= 300; m_ail += currentStep) {
+    for (int E_ail = 100; E_ail <= 350; E_ail += currentStep) {
+        for (int m_ail = 2*E_ail/3; m_ail <= 400; m_ail += currentStep) {
             for (int n_ail = 50; n_ail <= m_ail; n_ail += currentStep) {
-                for (int p_ail = 0; p_ail <= n_ail; p_ail += currentStep) {
-                    for (int E_can = 100; E_can <= 400; E_can += currentStep) {
-                        for (int m_can = 50; m_can <= 300; m_can += currentStep) {
+                for (int p_ail = 0; p_ail <= 300; p_ail += currentStep) {
+                    for (int E_can = 100; E_can <= 350; E_can += currentStep) {
+                        for (int m_can = 2*E_can/3; m_can <= 400; m_can += currentStep) {
                             for (int n_can = 50; n_can <= m_can; n_can += currentStep) {
-                                for (int p_can = 0; p_can <= n_can; p_can += currentStep) {
+                                for (int p_can = 0; p_can <= 300; p_can += currentStep) {
 
                                     // Update the number of iterations completed
                                     iterationsCompleted++;
@@ -272,8 +272,8 @@ int main(int argc, char *argv[]) {
                                     double MS_Cn_maxShip = calculateMS_Cn_max(MS_maxShip, Cn0Ship);
 
                                     // Calculate the distance
-                                    double distance = alpha*calculateDistance(Cn, Cn0, MS_min, MS_max, MS_Cn_min, MS_Cn_max, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
-                                    double distanceShip = calculateDistance(CnShip, Cn0Ship, MS_minShip, MS_maxShip, MS_Cn_minShip, MS_Cn_maxShip, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
+                                    double distance = 3*(2*E_ail/3)/m_ail + 2*(p_ail/300) + alpha*2*calculateDistance(Cn, Cn0, MS_min, MS_max, MS_Cn_min, MS_Cn_max, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
+                                    double distanceShip = 3*(2*E_can/3)/m_can + 2*(p_can/300) + 2*calculateDistance(CnShip, Cn0Ship, MS_minShip, MS_maxShip, MS_Cn_minShip, MS_Cn_maxShip, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
 
                                     // Check if the rocket is stable
                                     char* stability = checkStability(Cn, Cn0, MS_min, MS_max, MS_Cn_min, MS_Cn_max, CritCnmin, CritCnmax, CritMsmin, CritMsmax, CritMsCnmin, CritMsCnmax);
@@ -344,7 +344,7 @@ int main(int argc, char *argv[]) {
         elapsed_seconds = (double)(current_time - start_time) / CLOCKS_PER_SEC;
 
         if (E_ail > 100) {
-            double progress_fraction = (double)(E_ail - 100) / 300;
+            double progress_fraction = (double)(E_ail - 100) / 250;
             double estimated_total_time = elapsed_seconds / progress_fraction;
             double remaining_time_seconds = estimated_total_time - elapsed_seconds;
 
@@ -607,9 +607,9 @@ double calculateXcgVide(double XcgSans, double MasseSans, double XpropuRef, doub
 double calculateDistance(double Cn, double Cn0, double MS_min, double MS_max, double MS_Cn_min, double MS_Cn_max, double CritCnmin, double CritCnmax, double CritMsmin, double CritMsmax, double CritMsCnmin, double CritMsCnmax) {
     double totalDistance = 0;
 
-    totalDistance += calculateLineDistance(Cn, Cn0, CritCnmin, CritCnmax, 50);
-    totalDistance += calculateLineDistance(MS_min, MS_max, CritMsmin, CritMsmax, 50);
-    totalDistance += calculateLineDistance(MS_Cn_min, MS_Cn_max, CritMsCnmin, CritMsCnmax, 50);
+    totalDistance += calculateLineDistance(Cn, Cn0, CritCnmin, CritCnmax, 100);
+    totalDistance += calculateLineDistance(MS_min, MS_max, CritMsmin, CritMsmax, 100);
+    totalDistance += calculateLineDistance(MS_Cn_min, MS_Cn_max, CritMsCnmin, CritMsCnmax, 100);
 
     return totalDistance;
 }
@@ -620,14 +620,14 @@ double calculateLineDistance(double value1, double value2, double center1, doubl
     if (valueInRange(value1, center1, center2) && valueInRange(value2, center1, center2)) {
         distance = distanceToCenter(value1, (center1 + center2) / 2) + distanceToCenter(value2, (center1 + center2) / 2);
     } else {
-        distance = centerRangeFactor * fabs(value1 - (center1 + center2) / 2) + centerRangeFactor * fabs(value2 - (center1 + center2) / 2);
+        distance = centerRangeFactor * (distanceToCenter(value1, (center1 + center2) / 2) + distanceToCenter(value2, (center1 + center2) / 2));
     }
 
     return distance;
 }
 
 double distanceToCenter(double value, double center) {
-    return fabs(value - center);
+    return fabs(value - center) / center;
 }
 
 double valueInRange(double value, double rangeStart, double rangeEnd) {
